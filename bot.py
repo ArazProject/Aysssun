@@ -27,43 +27,41 @@ Bot = Client(
 
 db = Database()
 
-START_TEXT = """ `Hai {}, 
-Am a YouTube Downloader Bot I Can Download Songs,Videos and Lyrics From YouTube and lyrics and  Would upload into Telegram. 
-Use /help Commands For More.`
+START_TEXT = """ `Salam {}, 
+Mən Youtubedən musiqi,video yükləmək üçün sahibim tərəfindən yaradılmış botam`
 """
 
 CMDS_TEXT = """
-`Here It is The List of Commamds and Its usage.`
+`Budur Komandirlərin Siyahısı və İstifadəsi.`
 
-- /song - This Command is For Downloading Songs. 
-- /lyrics - This Command is For Scrapping Lyrics of a Song. 
-- /video - This Command is For Downloading Videos. 
-- Also You Can search videos via inline Mode on Bot. 
+- /song - Bu komanda musiqi yükləmək üçündür. 
+- /lyrics - Bu komanda mahnıların sözlərini tapmaq üçündür.. 
+- /video - Bu komanda video yükləyir. 
+- `Siz həmçinin Bot-da daxili rejim vasitəsilə videoları axtara bilərsiniz.`
+`Hər üç əmr üçün nümunələr.`
 
-`Exmples For Both Those Commands.`
-
-- /song [song name] or [youTube link]. 
-  [/song Alone]. 
-- /lyrics [song name]. 
-  [/lyrics alone] 
-- /video [video name] or [YouTube link] 
-  [/video Alone] 
+- /song [musiqi adı] və [youTube linki]. 
+  [/song Tək]. 
+- /lyrics [musiqi adı]. 
+  [/lyrics tək] 
+- /video [video adı] və [YouTube linki] 
+  [/video Tək] 
   
 """
 
 ABOUT_TEXT = """
-- **Bot :** `Song Downloader`
-- **Creator :** [MR-JINN-OF-TG](https://Github.com/MR-JINN-OF-TG)
-- **Support :** [CLICK HERE](https://telegram.me/NAZRIYASUPPORT)
-- **Source :** [CLICK HERE](https://github.com/MR-JINN-OF-TG/Song-Downloader)
-- **Language :** [Python3](https://python.org)
-- **Library :** [Pyrogram](https://pyrogram.org)
+- **Bot :** `Aysun💜`
+- **Creator :** [Araz](https://Github.com/ArazProject/Aysssun)
+- **Support :** [Kliklə](https://telegram.me/suplegend)
+- **Mənbə :** [Kliklə](https://github.com/ArazProject/Aysssun)
+- **Dil :** [Python3](https://python.org)
+- **Kitabxana :** [Pyrogram](https://pyrogram.org)
 - **Server :** [Heroku](https://heroku.com)
 
 """
 START_BUTTONS = InlineKeyboardMarkup(
         [[
-        InlineKeyboardButton('Support📕', url=f"https://telegram.me/{Config.SUPPORT}"), 
+        InlineKeyboardButton('Support📕', url=f"https://t.me/suplegend"), 
         InlineKeyboardButton(text="SEARCH🔎", switch_inline_query_current_chat="")
         ],[
         InlineKeyboardButton('HELP & USAGE⚙️', callback_data ='cmds') 
@@ -130,8 +128,8 @@ async def about(bot, update):
 @Bot.on_message(filters.private & filters.command("status"), group=5)
 async def status(bot, update):
     total_users = await db.total_users_count()
-    text = "**Music Bot Status**\n"
-    text += f"\n**Total Users hit start:** `{total_users}`"
+    text = "**Musiqi Bot Status**\n"
+    text += f"\n**Ümumi istifadəçilər başlanğıcı:** `{total_users}`"
     await update.reply_text(
         text=text,
         quote=True,
@@ -162,7 +160,7 @@ async def song(_, message: Message):
     for i in message.command[1:]:
         query += ' ' + str(i)
     print(query)
-    k=await message.reply_text("🔍 **Searching Song...**")
+    k=await message.reply_text("🔍 **Musiqi axtarılır...**")
     ydl_opts = {
         "format": "bestaudio[ext=m4a]",
         "geo-bypass": True,
@@ -198,15 +196,15 @@ async def song(_, message: Message):
 
         except Exception as e:
             print(e)
-            await k.edit('❌ **Found Literary Noting! \nPlease Try Another Song or Use Correct Spelling.**')
+            await k.edit('❌ **Ədəbi qeyd tapıldı! \nBaşqa Mahnı Yoxlayın və ya Düzgün Yazını İstifadə edin.**')
             return
     except Exception as e:
         await k.edit(
-            "❗ **Enter An Song Name!** \nFor Example: `/song Alone Marshmellow`"
+            "❗ **Musiqi adını qeyd edin!** \nNümunə: `/song Ayaz Babayev - Mələk kimi`"
         )
         print(str(e))
         return
-    await k.edit("📥 **Downloading Song...**")
+    await k.edit("📥 **Musiqi Yüklənir...**")
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=False)
@@ -217,12 +215,12 @@ async def song(_, message: Message):
         for i in range(len(dur_arr)-1, -1, -1):
             dur += (int(dur_arr[i]) * secmul)
             secmul *= 60
-        await k.edit("📤 **Uploading Song...**")
+        await k.edit("📤 **Musiqi endirilir...**")
         await message.reply_audio(audio_file, caption=cap, parse_mode='HTML', title=title, duration=dur, performer=performer, thumb=thumb_name)
         await k.delete()
         await mp.delete(message)
     except Exception as e:
-        await k.edit(f'❌ **An Error Occured!** \n\nError:- {e}')
+        await k.edit(f'❌ **Bir səhv baş verdi!** \n\nError:- {e}')
         print(e)
         pass
     try:
@@ -246,7 +244,7 @@ async def inline(client: Client, query: InlineQuery):
         await client.answer_inline_query(
             query.id,
             results=answers,
-            switch_pm_text="Search your query here...🔎",
+            switch_pm_text="Sorğunuzu burada axtarın...🔎",
             switch_pm_parameter="help",
             cache_time=0
         )
@@ -424,13 +422,13 @@ async def ytmusic(client, message: Message):
             ytdl_data = ytdl.extract_info(url, download=True)
 
     except Exception:
-        # await pablo.edit(event, f"**Failed To Download** \n**Error :** `{str(e)}`")
+        # await pablo.edit(event, f"**Yüklənmə uğursuz oldu** \n**Error :** `{str(e)}`")
         is_downloading = False
         return
 
     c_time = time.time()
     file_stark = f"{ytdl_data['id']}.mp4"
-    capy = f"**Video Title ➠** `{thum}` \n**Requested Song :** `{urlissed}` \n**Source :** `{thums}` \n**Link :** `{mo}`"
+    capy = f"**Video Title ➠** `{thum}` \n**İstənilən mahnı :** `{urlissed}` \n**Mənbə :** `{thums}` \n**Link :** `{mo}`"
     await client.send_video(
         message.chat.id,
         video=open(file_stark, "rb"),
@@ -443,7 +441,7 @@ async def ytmusic(client, message: Message):
         progress_args=(
             pablo,
             c_time,
-            f"`Uploading {urlissed} Song From YouTube Music!`",
+            f"`Yüklənir {urlissed} Youtubedən mahnı!`",
             file_stark,
         ),
     )
